@@ -2,7 +2,7 @@ module Related
 
 using JSON3, StructTypes, Dates, StaticArrays
 
-export main
+export main, read_data
 
 const topn = 5
 
@@ -45,7 +45,7 @@ function related(posts)
     topn = 5
     # key is every possible "tag" used in all posts
     # value is indicies of all "post"s that used this tag
-    tagmap = Dict{String,Vector{T}}()
+    tagmap = Dict{String,Vector{T}}() 
     sizehint!(tagmap, 100)
     for (idx, post) in enumerate(posts)
         for tag in post.tags
@@ -83,21 +83,19 @@ function related(posts)
     return relatedposts
 end
 
-function main()
+function read_data()
     json_string = read(@__DIR__()*"/../../../posts.json", String)
     posts = JSON3.read(json_string, Vector{PostData})
-    fake_posts = first(posts, 1000)
-    related(fake_posts) #warmup
+    return posts
+end 
 
+function main(posts)
     start = now()
     all_related_posts = related(posts)
     println("Processing time (w/o IO): $(now() - start)")
+    return all_related_posts
+end 
 
-    open(@__DIR__()*"/../../../related_posts_julia.json", "w") do f
-        JSON3.write(f, all_related_posts)
-    end
-end
-
-main()
+main(read_data())
 
 end # module Related
