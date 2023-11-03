@@ -83,19 +83,15 @@ function related(posts)
     return relatedposts
 end
 
-function read_data()
+function main()
     json_string = read(@__DIR__()*"/../../../posts.json", String)
     posts = JSON3.read(json_string, Vector{PostData})
-    return posts
-end 
-
-function main(posts)
     start = now()
     all_related_posts = related(posts)
     println("Processing time (w/o IO): $(now() - start)")
     return all_related_posts
-end 
+end
 
-main(read_data())
+main()
 
 end # module Related
