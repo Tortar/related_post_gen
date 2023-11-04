@@ -2,7 +2,7 @@ module Related
 
 using JSON3, StructTypes, StaticArrays
 
-export main
+export main, read_data
 
 const topn = 5
 
@@ -45,7 +45,7 @@ function related(posts)
     topn = 5
     # key is every possible "tag" used in all posts
     # value is indicies of all "post"s that used this tag
-    tagmap = Dict{String,Vector{T}}()
+    tagmap = Dict{String,Vector{T}}() 
     sizehint!(tagmap, 100)
     for (idx, post) in enumerate(posts)
         for tag in post.tags
